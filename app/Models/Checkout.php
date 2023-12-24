@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Checkout extends Model
 {
@@ -18,4 +19,24 @@ class Checkout extends Model
         'cvc',
         'is_paid',
     ];
+
+    public function setExpiredAttribute($vallue)
+    {
+        $this->attributes['expired'] = date('Y-m-t', strtotime($vallue));
+    }
+
+    /**
+     * Get the user that owns the Checkout
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function Camp(): BelongsTo
+    {
+        return $this->belongsTo(Camp::class);
+    }
+
+    public function User(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
